@@ -18,8 +18,11 @@ __global__ void parallelThreadOperation(float* a, float* b, float* debug, float*
 	//printf("gpu  %d %d %d\n", blockIdx.x, threadIdx.x, i);
 	//printf("%d %d %d \n", gridDim.x, gridDim.y, gridDim.z);
 	//printf("gpu %d", i);
-	int x = blockIdx.y * blockDim.x + threadIdx.x;
-	debug[x] = x;
+	//int x = blockIdx.y * blockDim.x + threadIdx.x;
+	int blockId = blockIdx.z * gridDim.x * gridDim.y + blockIdx.y * gridDim.x + blockIdx.x;
+	int threadId = blockId * blockDim.x * blockDim.y * blockDim.z;
+	threadId += threadIdx.z * blockDim.x * blockDim.y + threadIdx.y * blockDim.x + threadIdx.x;
+	debug[threadId] = threadId;
 
 	//add operation in block 0
 	if (blockIdx.y == 0)
